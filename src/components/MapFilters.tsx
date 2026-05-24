@@ -1,0 +1,1 @@
+// TODO: Pasar aquí la parte de filtros de GeoPanel, porque ya se me acumuló mucho allá
