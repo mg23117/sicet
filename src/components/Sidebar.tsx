@@ -10,7 +10,7 @@ const menuItems = [
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 min-h-screen bg-sidebar border-r border-slate-800 text-slate-300">
+    <aside className="w-64 min-h-screen bg-[#0B1120] border-r border-slate-800 text-slate-300 shadow-xl">
       <div className="flex flex-col items-center text-center px-4 py-6 border-b border-slate-700">
         <img
           src={logo}
