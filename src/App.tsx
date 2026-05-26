@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import GlobalLayout from "./layouts/GlobalLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import GeoPanel from "./pages/GeoPanel";
 
 function App() {
   return (
@@ -19,6 +20,15 @@ function App() {
           }
         >
           <Route index element={<Dashboard />} />
+        </Route>
+
+        <Route
+          element={
+            <ProtectedRoute>
+              <GlobalLayout />
+            </ProtectedRoute>}
+        >
+          <Route path="/geolocalizacion" element={<GeoPanel />} />
         </Route>
       </Routes>
     </BrowserRouter>
