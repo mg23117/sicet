@@ -7,6 +7,7 @@ import EquipmentPopup from "../components/EquipmentPopup";
 import EquipmentDetailModal from "../components/EquipmentDatailModal";
 import FitBounds from "../components/FitBounds";
 import clsx from "clsx";
+import { useEquipmentSearchParam } from "../hooks/useEquipmentSearchParam";
 
 interface ChangeViewProps {
     center: [number, number];
@@ -29,7 +30,7 @@ function ChangeView({ center, zoom }: ChangeViewProps) {
 
 export default function GeoPanel() {
     const [searchTerm, setSearchTerm] = useState("");
-    const [branchFilter, setBranchFilter] = useState("Todas");
+    const [branchFilter, setBranchFilter] = useState<string | null>("Todas");
     const [equipmentSelected, setEquipmentSelected] = useState<Equipment | null>(null);
     const [hoveredEquipmentId, setHoveredEquipmentId] = useState<string | null>(null);
     const [modalEquipment, setModalEquipment] = useState<Equipment | null>(null);
@@ -59,6 +60,21 @@ export default function GeoPanel() {
             setEquipmentSelected(null);
         }
     }, [filteredEquipments, equipmentSelected]);
+
+    // El hook para poder manejar las URL y que se puedan compartir links y así
+    const { setUrlEquipment } = useEquipmentSearchParam({
+        equipments: equiposMock,
+
+        // Es la función que se llama cuando la URL tenga un equipo que si sea valido
+        onSelect: (e) => {
+            setEquipmentSelected(e);
+        }
+    });
+
+    // Para sincronizar cuando se seleccione algo con la URL
+    useEffect(() => {
+        setUrlEquipment(equipmentSelected);
+    }, [equipmentSelected, setUrlEquipment]);
 
     // Método que va a sacar un popu y centrar el mapa al seleccionar un equipo del inventario
     const handleSelectedEquipment = (equipment: Equipment) => {
@@ -111,6 +127,21 @@ export default function GeoPanel() {
                     )}
 
                 </MapContainer>
+
+                {equipmentSelected && (
+                    <div className="flex-1 relative">
+                        {/* Botón flotante "Ver todos" */}
+                        <button
+                            onClick={() => { setEquipmentSelected(null), setBranchFilter("Todas") }}
+                            className="absolute bottom-6 right-6 z-[1000] bg-white hover:bg-gray-100 text-gray-800 font-medium py-2 px-4 rounded-full shadow-lg border border-gray-200 transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                            </svg>
+                            Ver todos
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/**Sección de filtros */}
