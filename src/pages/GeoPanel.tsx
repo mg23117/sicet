@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { equiposMock, type Equipment } from "../data/equipment.mock";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import EquipmentPopup from "../components/EquipmentPopup";
+import EquipmentDetailModal from "../components/EquipmentDatailModal";
 import FitBounds from "../components/FitBounds";
 import clsx from "clsx";
 
@@ -31,6 +32,7 @@ export default function GeoPanel() {
     const [branchFilter, setBranchFilter] = useState("Todas");
     const [equipmentSelected, setEquipmentSelected] = useState<Equipment | null>(null);
     const [hoveredEquipmentId, setHoveredEquipmentId] = useState<string | null>(null);
+    const [modalEquipment, setModalEquipment] = useState<Equipment | null>(null);
 
     // Metemos las sucuarsales guardadas en el mock en un set y le agregarmos la opción "Todas"
     const branches = useMemo(
@@ -68,6 +70,10 @@ export default function GeoPanel() {
         }
     }
 
+    const handleOpenModal = (equipment: Equipment) => {
+        setModalEquipment(equipment);
+    }
+
     return (
         <div className="flex h-full w-full">
 
@@ -93,7 +99,12 @@ export default function GeoPanel() {
                         filteredEquipments={filteredEquipments}
                         equipmentSelected={equipmentSelected}
                         clickEventHandler={handleSelectedEquipment}
+                        onOpenModal={handleOpenModal}
                     />
+
+                    {modalEquipment && (
+                        <EquipmentDetailModal equipment={modalEquipment} onClose={() => setModalEquipment(null)} />
+                    )}
 
                     {!equipmentSelected && (
                         <FitBounds equipments={filteredEquipments} />

@@ -2,15 +2,17 @@ import { Marker, Popup } from "react-leaflet";
 import { type Equipment } from "../data/equipment.mock";
 import { useEffect, useRef } from "react";
 import L from "leaflet";
+import EquipmentPopupContent from "./EquipmentPopupContent";
 
 interface EquipmentPopupProps {
     filteredEquipments: Equipment[];
     equipmentSelected: Equipment | null;
     clickEventHandler: (equipment: Equipment) => void;
+    onOpenModal: (equipment: Equipment) => void;
 }
 
-export default function EquipmentPopup({ filteredEquipments, clickEventHandler, equipmentSelected }: EquipmentPopupProps) {
-    const markerRef = useRef<Record<number, L.Marker>>({});
+export default function EquipmentPopup({ filteredEquipments, clickEventHandler, equipmentSelected, onOpenModal }: EquipmentPopupProps) {
+    const markerRef = useRef<Record<string, L.Marker>>({});
 
     // Para que se abra solo automaticamente el popu cuando se cambia la selección
     useEffect(() => {
@@ -34,14 +36,8 @@ export default function EquipmentPopup({ filteredEquipments, clickEventHandler, 
                     }}
                     eventHandlers={{ click: () => clickEventHandler(e) }}
                 >
-                    <Popup>
-                        <div>
-                            <strong>{e.name}</strong>
-                            <br />
-                            Sucursal: {e.branch}
-                            <br />
-                            Estado: {e.status}
-                        </div>
+                    <Popup minWidth={200} maxWidth={1000}>
+                        <EquipmentPopupContent equipment={e} onOpenModal={onOpenModal} />
                     </Popup>
                 </Marker>
             ))}

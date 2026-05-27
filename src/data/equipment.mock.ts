@@ -5,7 +5,7 @@ export interface Equipment {
     branch: string;
     lat: number;
     lng: number;
-    status: string;
+    status: 'Activo' | 'Inactivo' | 'En reparación';
 }
 
 export const equiposMock: Equipment[] = [
