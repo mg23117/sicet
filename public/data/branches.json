@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "name": "Sucursal Norte",
+        "city": "Santa Ana",
+        "lat": 13.9947,
+        "lng": -89.5567
+    },
+    {
+        "id": 2,
+        "name": "Sucursal Central",
+        "city": "San Salvador",
+        "lat": 13.6929,
+        "lng": -89.2182
+    },
+    {
+        "id": 3,
+        "name": "Sucursal Sur",
+        "city": "San Miguel",
+        "lat": 13.4833,
+        "lng": -88.1833
+    }
+]
