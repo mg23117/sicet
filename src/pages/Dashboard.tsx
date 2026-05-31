@@ -7,14 +7,32 @@ import {
   FaBan
 } from "react-icons/fa";
 
+import { getEquipments } from "../services/EquipmentStorage";
+
+
 const Dashboard = () => {
-const stats = {
-  total: 512,
-  operativos: 480,
-  mantenimiento: 18,
-  dañados: 14,
-  descontinuados: 7,
-};
+
+  const equipments = getEquipments();
+
+ const stats = {
+    total: equipments.length,
+
+    operativo: equipments.filter(
+      (e) => e.status === "Operativo"
+    ).length,
+
+    reparacion: equipments.filter(
+      (e) => e.status === "En reparación"
+    ).length,
+
+    dañados: equipments.filter(
+      (e) => e.status === "Dañado"
+    ).length,
+
+    FueradeServicio: equipments.filter(
+      (e) => e.status === "Fuera de servicio"
+    ).length,
+  };
   return (
    
    <div>
@@ -45,11 +63,11 @@ const stats = {
 
           <div>
             <p className="text-gray-400 text-sm uppercase">
-              En mantenimiento
+              En reparación
             </p>
 
            <h2 className="text-4xl font-bold text-yellow-400 mt-2">
-              {stats.mantenimiento}
+              {stats.reparacion}
             </h2>
           </div>
 
@@ -66,17 +84,18 @@ const stats = {
             </p>
 
              <h2 className="text-4xl font-bold text-green-400 mt-2">
-              {stats.operativos}
+              {stats.operativo}
             </h2>
           </div>
 
           <FaCheckCircle className="text-5xl text-green-400" />
         </div>
       </div>
-{/* Sección inferior */}
+
+         {/* Sección inferior */}
 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
 
-  {/* Donut card (ocupa 2 columnas en lg) */}
+
   <div className="bg-[#111827] rounded-2xl p-6 shadow-lg lg:col-span-2">
 
     <h2 className="text-xl font-semibold mb-4">
@@ -92,7 +111,7 @@ const stats = {
 
       <div className="flex items-center gap-2">
         <span className="w-3 h-3 rounded-full bg-yellow-400" />
-        Mantenimiento
+        En reparación
       </div>
 
       <div className="flex items-center gap-2">
@@ -102,7 +121,7 @@ const stats = {
 
       <div className="flex items-center gap-2">
         <span className="w-3 h-3 rounded-full bg-red-400" />
-        Descontinuados
+        Fuera de Servicio
       </div>
     </div>
 
@@ -126,7 +145,7 @@ const stats = {
 
   </div>
 
-  {/* Cards laterales */}
+    {/* Tarjetas laterales */}
   <div className="flex flex-col gap-6">
 
     <div className="bg-[#111827] rounded-2xl p-7 min-h-[140px] shadow-lg flex justify-between items-center">
@@ -142,9 +161,9 @@ const stats = {
 
     <div className="bg-[#111827] rounded-2xl p-7 min-h-[140px] shadow-lg flex justify-between items-center">
       <div>
-        <p className="uppercase text-sm text-red-400">Descontinuados</p>
+        <p className="uppercase text-sm text-red-400">Fuera de Servicio</p>
         <h2 className="text-4xl font-bold text-red-400 mt-2">
-          {stats.descontinuados}
+          {stats.FueradeServicio}
         </h2>
       </div>
 
