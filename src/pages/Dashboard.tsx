@@ -10,17 +10,15 @@ import {
 import { useEffect, useState } from "react";
 import { getEquipments } from "../services/EquipmentStorage";
 
-
-
 const Dashboard = () => {
 
 
   const [stats, setStats] = useState({
     total: 0,
-    operativos: 0,
+    operativo: 0,
     reparacion: 0,
     dañados: 0,
-    fueradeServicio: 0,
+    FueradeServicio: 0,
   });
 
   useEffect(() => {
@@ -44,7 +42,45 @@ const Dashboard = () => {
 
   },
  []);
+const totalEquipos = stats.total || 1;
 
+  const operativoPorcentaje =
+    (stats.operativo / totalEquipos) * 100;
+
+  const reparacionPorcentaje =
+    (stats.reparacion / totalEquipos) * 100;
+
+  const dañadosPorcentaje =
+    (stats.dañados / totalEquipos) * 100;
+
+  const FueradeServicioPorcentaje =
+    (stats.FueradeServicio / totalEquipos) * 100;
+
+ const donutStyle = {
+  background: `conic-gradient(
+    #22c55e 0% ${operativoPorcentaje}%,
+    #facc15 ${operativoPorcentaje}% ${
+      operativoPorcentaje + reparacionPorcentaje
+    }%,
+    #a855f7 ${
+      operativoPorcentaje + reparacionPorcentaje
+    }% ${
+      operativoPorcentaje +
+      reparacionPorcentaje +
+      dañadosPorcentaje
+    }%,
+    #ef4444 ${
+      operativoPorcentaje +
+      reparacionPorcentaje +
+      dañadosPorcentaje
+    }% ${
+      operativoPorcentaje +
+      reparacionPorcentaje +
+      dañadosPorcentaje +
+      FueradeServicioPorcentaje
+    }%
+  )`,
+};
   return (
    
    <div>
@@ -138,20 +174,37 @@ const Dashboard = () => {
     </div>
 
     {/* Donut */}
-    <div className="flex flex-col flex-1 justify-center items-center h-[260px]">
+    <div className="flex justify-center items-start pt-2 h-[220px]">
       <div
-        className="
-          w-64 h-64 rounded-full
-          bg-[conic-gradient(#22c55e_0%_60%,#facc15_60%_80%,#a855f7_80%_90%,#ef4444_90%_100%)]
-          relative
-        "
+           className="w-56 h-56 rounded-full relative shadow-lg"
+          style={donutStyle}
+  
       >
         <div
           className="
-            absolute w-24 h-24 rounded-full bg-[#111827]
-            top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-          "
-        />
+        absolute
+        w-32 h-32
+        rounded-full
+        bg-[#111827]
+        top-1/2
+        left-1/2
+        -translate-x-1/2
+        -translate-y-1/2
+        flex
+        flex-col
+        justify-center
+        items-center
+      "
+      >
+      <p className="text-xs text-gray-400 uppercase">
+        Total
+      </p>
+
+      <h2 className="text-3xl font-bold text-white">
+        {stats.total}
+      </h2>
+
+    </div>
       </div>
     </div>
 
