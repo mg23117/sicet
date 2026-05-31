@@ -7,32 +7,44 @@ import {
   FaBan
 } from "react-icons/fa";
 
+import { useEffect, useState } from "react";
 import { getEquipments } from "../services/EquipmentStorage";
+
 
 
 const Dashboard = () => {
 
-  const equipments = getEquipments();
 
- const stats = {
-    total: equipments.length,
+  const [stats, setStats] = useState({
+    total: 0,
+    operativos: 0,
+    reparacion: 0,
+    dañados: 0,
+    fueradeServicio: 0,
+  });
 
-    operativo: equipments.filter(
-      (e) => e.status === "Operativo"
-    ).length,
+  useEffect(() => {
 
-    reparacion: equipments.filter(
-      (e) => e.status === "En reparación"
-    ).length,
+    const worker = new Worker(
+      new URL("../workers/statsWorker.ts", import.meta.url),
+      { type: "module" }
+    );
 
-    dañados: equipments.filter(
-      (e) => e.status === "Dañado"
-    ).length,
+    const equipments = getEquipments();
 
-    FueradeServicio: equipments.filter(
-      (e) => e.status === "Fuera de servicio"
-    ).length,
-  };
+    worker.postMessage(equipments);
+
+    worker.onmessage = (event) => {
+      setStats(event.data);
+    };
+
+    return () => {
+      worker.terminate();
+    };
+
+  },
+ []);
+
   return (
    
    <div>
@@ -176,5 +188,7 @@ const Dashboard = () => {
 </div>
   );
 };
+
+
 
 export default Dashboard;
