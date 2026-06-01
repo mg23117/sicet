@@ -1,9 +1,14 @@
-import { type Equipment } from "../data/equipment.mock";
+import type { Equipment } from '../types/Equipment';
 import { X } from "lucide-react";
 
 export interface EquipmentDetailModalProps {
     equipment: Equipment;
     onClose: () => void;
+}
+
+function formatDate(dateStr: string) {
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'long', year: 'numeric' }).format(date);
 }
 
 export default function EquipmentDetailModal({ equipment, onClose }: EquipmentDetailModalProps) {
@@ -30,6 +35,7 @@ export default function EquipmentDetailModal({ equipment, onClose }: EquipmentDe
                     </button>
                 </div>
 
+                {/**Los campos que muestran los detalles el equipo */}
                 <div className="space-y-3 text-sm">
                     <div>
                         <p className="text-gray-500">Nombre</p>
@@ -52,6 +58,20 @@ export default function EquipmentDetailModal({ equipment, onClose }: EquipmentDe
                         <p className="text-gray-500">Estado</p>
                         <p className="font-medium text-gray-900">
                             {equipment.status}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p className="text-gray-500">Fecha de compra</p>
+                        <p className="font-medium text-gray-900">
+                            {formatDate(equipment.purchaseDate)}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p className="text-gray-500">Precio</p>
+                        <p className="font-medium text-gray-900">
+                            {equipment.price.toLocaleString()}
                         </p>
                     </div>
                 </div>

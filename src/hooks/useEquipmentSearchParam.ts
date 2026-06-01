@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { type Equipment } from '../data/equipment.mock'
+import type { Equipment } from '../types/Equipment';
 
 interface useEquipmentSearchParamProps {
     equipments: Equipment[];

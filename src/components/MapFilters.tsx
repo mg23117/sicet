@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { type Equipment } from "../data/equipment.mock";
+import type { Equipment } from '../types/Equipment';
 
 interface MapFiltersProps {
     branchFilter: string | null;
