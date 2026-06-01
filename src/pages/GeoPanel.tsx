@@ -1,7 +1,7 @@
 import "leaflet/dist/leaflet.css";
 import { INITIAL_CENTER, DEFAULT_ZOOM, MAP_PROVIDERS, MEDIUM_ZOOM } from "../constants/mapConfig";
-import { useState, useMemo, useEffect } from "react";
-import { equiposMock, type Equipment } from "../data/equipment.mock";
+import { useState, useEffect } from "react";
+import type { Equipment } from '../types/Equipment';
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import EquipmentPopup from "../components/EquipmentPopup";
 import EquipmentDetailModal from "../components/EquipmentDatailModal";
@@ -10,6 +10,7 @@ import { useEquipmentSearchParam } from "../hooks/useEquipmentSearchParam";
 import MapFilters from "../components/MapFilters";
 import ResetViewButton from "../components/ResetViewButton";
 import { useFilteredEquipments } from "../hooks/useFilteredEquipments";
+import { useEquipmentsWithCoords } from "../hooks/useEquipmentsWithCoords";
 
 interface ChangeViewProps {
     center: [number, number];
@@ -37,14 +38,11 @@ export default function GeoPanel() {
     const [hoveredEquipmentId, setHoveredEquipmentId] = useState<string | null>(null);
     const [modalEquipment, setModalEquipment] = useState<Equipment | null>(null);
 
-    // Metemos las sucuarsales guardadas en el mock en un set y le agregarmos la opción "Todas"
-    const branches = useMemo(
-        () => ["Todas", ...new Set(equiposMock.map((e) => e.branch))],
-        []
-    );
+    // Llamamos el hook que se encarga de darnos los equipos con coordenadas, las coordenadas de las sucursales y las sucursales disponibles con equipos
+    const { equipmentsWithCoords, branchCoordMap, availableBranches } = useEquipmentsWithCoords();
 
     // FIltro que se encarga de filtrar los equipos cuando se selecciona algún filtro o se escribe algo o las dos al mismo timepo
-    const filteredEquipments = useFilteredEquipments(branchFilter, searchTerm);
+    const filteredEquipments = useFilteredEquipments(equipmentsWithCoords, branchFilter, searchTerm);
 
     // Para quitar un equipmentSelected si el equipo seleccionado ya no está en filteredEquipments
     // Por si por ejemplo se selecciona un equipo y luego se aplica un filtro que lo excluya
@@ -56,8 +54,7 @@ export default function GeoPanel() {
 
     // El hook para poder manejar las URL y que se puedan compartir links y así
     const { setUrlEquipment } = useEquipmentSearchParam({
-        equipments: equiposMock,
-
+        equipments: equipmentsWithCoords,
         // Es la función que se llama cuando la URL tenga un equipo que si sea valido
         onSelect: (e) => {
             setEquipmentSelected(e);
@@ -69,7 +66,7 @@ export default function GeoPanel() {
         setUrlEquipment(equipmentSelected);
     }, [equipmentSelected, setUrlEquipment]);
 
-    // Método que va a sacar un popu y centrar el mapa al seleccionar un equipo del inventario
+    // Método que va a sacar un popup y centrar el mapa al seleccionar un equipo del inventario
     const handleSelectedEquipment = (equipment: Equipment) => {
         if (equipmentSelected?.id === equipment.id) {
             setEquipmentSelected(null);
@@ -100,7 +97,7 @@ export default function GeoPanel() {
                 >
                     {/** Cambiar de vista cuando se seleccione un equipo */}
                     {equipmentSelected && (
-                        <ChangeView center={[equipmentSelected.lat, equipmentSelected.lng]} zoom={MEDIUM_ZOOM} />
+                        <ChangeView center={[branchCoordMap.get(equipmentSelected.branch)!.lat, branchCoordMap.get(equipmentSelected.branch)!.lng]} zoom={MEDIUM_ZOOM} />
                     )}
 
                     {/** El mapa como tal */}
@@ -114,6 +111,7 @@ export default function GeoPanel() {
                         equipmentSelected={equipmentSelected}
                         clickEventHandler={handleSelectedEquipment}
                         onOpenModal={handleOpenModal}
+                        branchCoordMap={branchCoordMap}
                     />
 
                     {modalEquipment && (
@@ -121,7 +119,7 @@ export default function GeoPanel() {
                     )}
 
                     {!equipmentSelected && (
-                        <FitBounds equipments={filteredEquipments} />
+                        <FitBounds equipments={filteredEquipments} branchCoordMap={branchCoordMap} />
                     )}
 
                 </MapContainer>
@@ -136,7 +134,7 @@ export default function GeoPanel() {
                 searchTerm={searchTerm}
                 onSearchTermChange={setSearchTerm}
                 equipments={filteredEquipments}
-                branches={branches}
+                branches={availableBranches}
                 hoveredEquipmentId={hoveredEquipmentId}
                 onHoverEquipment={setHoveredEquipmentId}
                 onSelectEquipment={handleSelectedEquipment}

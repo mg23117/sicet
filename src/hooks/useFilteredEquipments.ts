@@ -1,16 +1,19 @@
 // hooks/useFilteredEquipments.ts
 import { useMemo } from 'react';
-import { equiposMock } from '../data/equipment.mock';
+import { type Equipment } from '../types/Equipment';
 
 export function useFilteredEquipments(
+    equipments: Equipment[],
     branchFilter: string | null,
     searchTerm: string
 ) {
     return useMemo(() => {
-        return equiposMock.filter((eq) => {
+        return equipments.filter((eq) => {
             const matchBranch = branchFilter === 'Todas' || branchFilter === eq.branch;
-            const matchSearch = eq.name.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchSearch = eq.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                eq.serialNumber.toLowerCase().includes(searchTerm.toLowerCase());
+
             return matchBranch && matchSearch;
         });
-    }, [equiposMock, branchFilter, searchTerm]);
+    }, [equipments, branchFilter, searchTerm]);
 }

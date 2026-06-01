@@ -1,6 +1,6 @@
-import { type Equipment } from "../data/equipment.mock";
+import type { Equipment } from '../types/Equipment';
 import { Building2, Barcode } from 'lucide-react';
-import clsx from "clsx";
+import { getStatusStyle } from '../constants/statusStyles';
 
 interface EquipmentPopupContentProps {
     equipment: Equipment;
@@ -8,18 +8,6 @@ interface EquipmentPopupContentProps {
 }
 
 export default function EquipmentPopupContent({ equipment, onOpenModal }: EquipmentPopupContentProps) {
-    const statusClass = (equipment: Equipment) => {
-        return clsx(
-            'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-            {
-                'bg-green-100 text-green-800': equipment.status === 'Activo',
-                'bg-red-100 text-red-800': equipment.status === 'Inactivo',
-                'bg-yellow-100 text-yellow-800': equipment.status === 'En reparación'
-            }
-        )
-    }
-
-
     return (
         <>
             <div className="min-w-[240px] max-w-sm p-2">
@@ -35,7 +23,7 @@ export default function EquipmentPopupContent({ equipment, onOpenModal }: Equipm
                     <div className="flex-1">
                         <div className="flex items-center justify-between flex-wrap gap-1">
                             <h3 className="text-sm font-semibold text-gray-900">{equipment.name}</h3>
-                            <span className={statusClass(equipment)}>
+                            <span className={getStatusStyle(equipment.status)}>
                                 {equipment.status}
                             </span>
                         </div>
