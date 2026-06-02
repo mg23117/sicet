@@ -1,3 +1,5 @@
+// Servicio encargado de gestionar el almacenamiento de equipos en localStorage,
+// incluyendo operaciones de lectura, escritura, actualización, eliminación y generación de IDs
 import type { Equipment } from "../types/Equipment";
 
 const STORAGE_KEY = "equipments"; // Clave para almacenar los equipos en el localStorage
