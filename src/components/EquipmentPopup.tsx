@@ -41,7 +41,16 @@ export default function EquipmentPopup({ filteredEquipments, clickEventHandler, 
                         }}
                         eventHandlers={{ click: () => clickEventHandler(e) }}
                     >
-                        <Popup minWidth={200} maxWidth={1000}>
+                        <Popup
+                            minWidth={220}
+                            maxWidth={320}
+                            autoPan
+                            keepInView
+                            autoPanPadding={[80, 80]}
+                            autoPanPaddingTopLeft={[80, 80]}
+                            autoPanPaddingBottomRight={[140, 140]}
+                            offset={[0, -8]}
+                        >
                             <EquipmentPopupContent equipment={e} onOpenModal={onOpenModal} />
                         </Popup>
                     </Marker>
