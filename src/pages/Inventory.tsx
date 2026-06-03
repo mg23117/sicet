@@ -1,14 +1,19 @@
-// Componente principal de inventario que administra el estado de los equipos,
-// carga datos, maneja las operaciones CRUD y coordina la interacción entre los componentes.
+// Vista principal de gestión de inventario.
+// Administra las operaciones CRUD de equipos, filtros de búsqueda,
+// modales de interacción y sincronización de datos con localStorage.
+
 import { useEffect, useState } from "react";
 import type { Equipment } from "../types/Equipment";
-import InventoryTable from "../components/InventoryTable";
-import EquipmentModal from "../components/EquipmentModal";
-import EquipmentForm from "../components/EquipmentForm";
-import DeleteModal from "../components/DeleteModal";
-import DetailModal from "../components/DetailModal";
+import InventoryTable from "../components/inventoryComponents/InventoryTable";
+import EquipmentModal from "../components/inventoryComponents/InventoryEquipmentModal";
+import EquipmentForm from "../components/inventoryComponents/InventoryEquipmentForm";
+import DeleteModal from "../components/inventoryComponents/DeleteModal";
+import DetailModal from "../components/inventoryComponents/InventoryDetailModal";
 import toast, { Toaster } from "react-hot-toast";
-import { Search, Plus } from "lucide-react";
+import useEquipmentForm from "../hooks/inventoryHooks/useEquipmentForm";
+import InventoryToolbar from "../components/inventoryComponents/InventoryToolbar";
+import useEquipmentFilters from "../hooks/inventoryHooks/useEquipmentFilters";
+import useInventoryData from "../hooks/inventoryHooks/useInventoryData";
 
 
 import { // Importa funciones para manejar el almacenamiento de equipos en localStorage
@@ -17,32 +22,24 @@ import { // Importa funciones para manejar el almacenamiento de equipos en local
     addEquipment,
     updateEquipment,
     deleteEquipment,
-
 } from "../services/EquipmentStorage";
-
-type Branch = { // type para representar la estructura real de cada objeto dentro del JSON, permite autocompletado, validación de tipos y detección de errores en compile time
-    id: number;
-    name: string; 
-    city: string;
-    lat: number;
-    lng: number;
-};
 
 function Inventory() { 
 
-    const [categories, setCategories] = useState<string[]>([]);
-    const [statuses, setStatuses] = useState<string[]>([]);
-    const [branches, setBranches] = useState<Branch[]>([]); // Se define el estado para almacenar las sucursales, utilizando el tipo Branch para garantizar que los datos tengan la estructura esperada
+    // HOOKS personalizados
+    const {categories, statuses, branches,} = useInventoryData(); // Carga las categorías, estados y sucursales desde archivos JSON utilizando el hook personalizado useInventoryData
+    const {name,setName,
+        category, setCategory,
+        serialNumber, setSerialNumber,
+        status, setStatus,
+        branch, setBranch,
+        purchaseDate, setPurchaseDate,
+        price, setPrice,
+        editId, setEditId,
+        resetForm, } = useEquipmentForm();
+
+    // ESTADOS (useState)
     const [equipments, setEquipments] = useState<Equipment[]>([]);
-    // Inputs del formulario:
-    const [name, setName] = useState("");
-    const [category, setCategory] = useState("");
-    const [serialNumber, setSerialNumber] = useState("");
-    const [status, setStatus] = useState("");
-    const [branch, setBranch] = useState("");
-    const [purchaseDate, setPurchaseDate] = useState("");
-    const [price, setPrice] = useState("");
-    const [editId, setEditId] = useState<string | null>(null); // Guarda qué equipo estamos editando, si es null estamos creando y si tiene id estamos editando 
     const [searchTerm, setSearchTerm] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
@@ -53,28 +50,17 @@ function Inventory() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Controla si el modal de eliminación está abierto o cerrado
     const [equipmentToDelete, setEquipmentToDelete] = useState<Equipment | null>(null); // Guarda el equipo que se va a eliminar
 
-    useEffect(() => {  // Carga las categorías, estados, sucursales y equipos al montar el componente
-        fetch("/data/categories.json")
-        .then((response) => response.json())
-        .then((data) => setCategories(data));
-
-        fetch("/data/status.json")
-        .then((response) => response.json())
-        .then((data) => setStatuses(data));
-
-        fetch("/data/branches.json")
-        .then((response) => response.json())
-        .then((data) => setBranches(data));
-
-        const storedEquipments = getEquipments();
-        setEquipments(storedEquipments);
+    // useEffect para cargar los equipos desde localStorage al montar el componente y cada vez que se actualiza la lista de equipos
+    useEffect(() => {
+        setEquipments(getEquipments());
     }, []);
 
+    // FUNCIONES PARA MANEJAR LAS OPERACIONES CRUD Y LA INTERACCIÓN CON LOS MODALES
     // AGREGAR NUEVO EQUIPO
     const handleAddEquipment = () => {
         if (!name || !category || !serialNumber || !status || !branch || !purchaseDate || !price) {
         toast.error("Todos los campos son obligatorios");
-        return;
+            return;
         }
 
         const newEquipment : Equipment = {
@@ -93,9 +79,8 @@ function Inventory() {
         setEquipments(getEquipments()); // Actualiza pantalla
         
         toast.success("Equipo creado correctamente");
-    
-        // Limpia formulario
-        handleOpenCreateModal();
+        
+        handleOpenCreateModal(); // Limpia formulario
 
         setIsModalOpen(false);
     }
@@ -124,24 +109,14 @@ function Inventory() {
 
         if (!editId) return;
 
-        const updatedEquipment : Equipment = { // Crea un nuevo objeto con los datos actualizados, manteniendo el mismo ID
-            id: editId,
-            name,
-            category,
-            serialNumber,
-            status,
-            branch,
-            purchaseDate,
-            price: Number(price),
-        };
+        // Crea un nuevo objeto con los datos actualizados, manteniendo el mismo ID
+        const updatedEquipment : Equipment = { id: editId, name, category, serialNumber, status, branch, purchaseDate, price: Number(price) };
 
         updateEquipment(updatedEquipment); // Actualiza el equipo en el localStorage
 
         setEquipments(getEquipments()); // Refresca pantalla
 
         toast.success("Equipo actualizado correctamente");
-
-        setEditId(null); 
         
         handleOpenCreateModal(); // Limpia formulario
 
@@ -172,16 +147,7 @@ function Inventory() {
 
     // LIMPIAR FORMULARIO
     const handleOpenCreateModal = () => {
-        setEditId(null);
-
-        setName("");
-        setCategory("");
-        setSerialNumber("");
-        setStatus("");
-        setBranch("");
-        setPurchaseDate("");
-        setPrice("");
-
+        resetForm();
         setIsModalOpen(true);
     };
 
@@ -192,61 +158,17 @@ function Inventory() {
     };
 
 
-    // FILTRAR EQUIPOS
-    const filteredEquipments = equipments.filter((equipment) => {
-        const matchesSearch =
-            equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) || // includes verifica si el término de búsqueda está contenido dentro del nombre del equipo, ignorando mayúsculas y minúsculas
-            equipment.serialNumber.toLowerCase().includes(searchTerm.toLowerCase());
-
-        const matchesCategory =
-            categoryFilter === "" || // Si está vacío, muestra todas las categorías
-            equipment.category === categoryFilter; //si no está vacío, muestra solo los equipos que coincidan con la categoría seleccionada
-
-        const matchesStatus =
-            statusFilter === "" ||
-            equipment.status === statusFilter;
-
-        const matchesBranch =
-            branchFilter === "" ||
-            equipment.branch === branchFilter;
-
-        return ( // El equipo debe cumplir TODOS los filtros al mismo tiempo para ser incluido en el resultado final
-            matchesSearch &&
-            matchesCategory &&
-            matchesStatus &&
-            matchesBranch
-        );
+    // FILTRAR EQUIPOS 
+    const filteredEquipments = useEquipmentFilters({
+        equipments,
+        searchTerm,
+        categoryFilter,
+        statusFilter,
+        branchFilter,
     });
 
     return (
         <div className="container mt-4">
-            <Toaster
-                position="top-center"
-                toastOptions={{
-                    
-                    duration: 3000,
-                    style: {
-                        minWidth: '400px', // Aumenta el ancho mínimo del cuadro
-                        fontSize: '20px', 
-                        padding: '20px', // Agrega más espacio interno
-                        background: "#1f2937",
-                        color: "#fff",
-                        border: "1px solid #374151",
-                    },
-                    success: { // Icono de éxito
-                        iconTheme: {
-                            primary: "#22c55e",
-                            secondary: "#fff",
-                        },
-                    },
-                    error: {
-                        iconTheme: { // Icono de error 
-                            primary: "#ef4444",
-                            secondary: "#fff",
-                        },
-                    }
-                }}
-            />
             {/* TÍTULO */}
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-white">
@@ -257,78 +179,25 @@ function Inventory() {
                 </p>
             </div>
             {/* TOOLBAR */}
-            <div className="bg-gray-800 border border-gray-700 rounded-xl p-5 mb-6">
-                {/* FILA SUPERIOR */}
-                <div className="flex flex-col lg:flex-row gap-3 mb-4">
-                    {/* BUSCADOR */}
-                    <div className="relative flex-1">
-                        <Search
-                            size={18}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Buscar equipo por nombre o número de serie..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-900 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"/>
-                    </div>
+            <InventoryToolbar
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
 
-                    {/* BOTÓN */}
-                    <button
-                        onClick={handleOpenCreateModal}
-                        className="flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition whitespace-nowrap">
-                        <Plus size={18} />
-                        Nuevo Equipo
-                    </button>
+                categoryFilter={categoryFilter}
+                setCategoryFilter={setCategoryFilter}
 
-                </div>
+                statusFilter={statusFilter}
+                setStatusFilter={setStatusFilter}
 
-                {/* FILTROS */}
-                <div className="flex flex-col md:flex-row gap-3">
-                    {/* CATEGORÍA */}
-                    <select
-                        value={categoryFilter}
-                        onChange={(e) => setCategoryFilter(e.target.value)}
-                        className="flex-1 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white">
-                        <option value="">Todas las categorías</option>
+                branchFilter={branchFilter}
+                setBranchFilter={setBranchFilter}
 
-                        {categories.map((category) => (
-                            <option key={category} value={category}>
-                                {category}
-                            </option>
-                        ))}
-                    </select>
+                categories={categories}
+                statuses={statuses}
+                branches={branches}
 
-                    {/* ESTADO */}
-                    <select
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                        className="flex-1 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white">
-                        <option value="">Todos los estados</option>
-
-                        {statuses.map((status) => (
-                            <option key={status} value={status}>
-                                {status}
-                            </option>
-                        ))}
-                    </select>
-
-                    {/* SUCURSAL */}
-                    <select
-                        value={branchFilter}
-                        onChange={(e) => setBranchFilter(e.target.value)}
-                        className="flex-1 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white">
-                        <option value="">Todas las sucursales</option>
-
-                        {branches.map((branch) => (
-                            <option key={branch.id} value={branch.name}>
-                                {branch.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
+                onCreate={handleOpenCreateModal}
+            />
             
             {/* TABLA */}
             {/* Pasa los equipos filtrados y las funciones de editar y eliminar como props al componente InventoryTable */}
@@ -347,31 +216,22 @@ function Inventory() {
                 <EquipmentForm
                     name={name}
                     setName={setName}
-
                     category={category}
                     setCategory={setCategory}
-
                     serialNumber={serialNumber}
                     setSerialNumber={setSerialNumber}
-
                     status={status}
                     setStatus={setStatus}
-
                     branch={branch}
                     setBranch={setBranch}
-
                     purchaseDate={purchaseDate}
                     setPurchaseDate={setPurchaseDate}
-
                     price={price}
                     setPrice={setPrice}
-
                     categories={categories}
                     statuses={statuses}
                     branches={branches}
-
                     editId={editId}
-
                     onSubmit={
                     editId
                         ? handleUpdateEquipment
@@ -397,6 +257,35 @@ function Inventory() {
                 isOpen={isDetailModalOpen}
                 equipment={selectedEquipment}
                 onClose={() => setIsDetailModalOpen(false)}
+            />
+            
+            {/* TOASTER PARA NOTIFICACIONES */}
+            <Toaster
+                position="top-center"
+                toastOptions={{
+                    
+                    duration: 3000,
+                    style: {
+                        minWidth: '400px', // Aumenta el ancho mínimo del cuadro
+                        fontSize: '20px', 
+                        padding: '20px', // Agrega más espacio interno
+                        background: "#1f2937",
+                        color: "#fff",
+                        border: "1px solid #374151",
+                    },
+                    success: { // Icono de éxito
+                        iconTheme: { 
+                            primary: "#22c55e",
+                            secondary: "#fff",
+                        },
+                    },
+                    error: { // Icono de error 
+                        iconTheme: { 
+                            primary: "#ef4444",
+                            secondary: "#fff",
+                        },
+                    }
+                }}
             />
         </div>
     );

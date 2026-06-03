@@ -1,5 +1,4 @@
 // Componente para mostrar un modal (ventana emergente) con información o formularios relacionados con el equipo
-//import type { Equipment } from "../types/Equipment";
 
 type EquipmentModalProps = { // describe qué tipos de datos espera recibir EquipmentModal
     isOpen: boolean;
