@@ -27,7 +27,10 @@ export default function FitBounds({ equipments, branchCoordMap }: FitBoundsProps
         if (!bounds.isValid()) return;
 
         map.fitBounds(bounds, {
-            padding: [50, 50], // un poco de padding para que no quede ningun marker al borde y que se vea mal
+            // un poco de padding para que no quede ningun marker al borde y que se vea mal
+            paddingTopLeft: [70, 70],
+            paddingBottomRight: [120, 120],
+            maxZoom: 14,
         });
     }, [equipments, branchCoordMap, map])
 
