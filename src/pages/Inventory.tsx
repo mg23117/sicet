@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react";
 import type { Equipment } from "../types/Equipment";
 import InventoryTable from "../components/InventoryTable";
+import EquipmentModal from "../components/EquipmentModal";
+import EquipmentForm from "../components/EquipmentForm";
+import DeleteModal from "../components/DeleteModal";
+import DetailModal from "../components/DetailModal";
+import toast, { Toaster } from "react-hot-toast";
+import { Search, Plus } from "lucide-react";
 
 
 import { // Importa funciones para manejar el almacenamiento de equipos en localStorage
@@ -41,6 +47,11 @@ function Inventory() {
     const [categoryFilter, setCategoryFilter] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
     const [branchFilter, setBranchFilter] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false); // Controla si el modal está abierto o cerrado, se pasa como prop al componente EquipmentModal para mostrar u ocultar el modal según su valor
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false); // Controla si el modal de detalles está abierto o cerrado
+    const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null); //
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Controla si el modal de eliminación está abierto o cerrado
+    const [equipmentToDelete, setEquipmentToDelete] = useState<Equipment | null>(null); // Guarda el equipo que se va a eliminar
 
     useEffect(() => {  // Carga las categorías, estados, sucursales y equipos al montar el componente
         fetch("/data/categories.json")
@@ -61,16 +72,8 @@ function Inventory() {
 
     // AGREGAR NUEVO EQUIPO
     const handleAddEquipment = () => {
-        if (
-            !name ||
-            !category ||
-            !serialNumber ||
-            !status ||
-            !branch ||
-            !purchaseDate ||
-            !price
-        ) {
-        alert("Todos los campos son obligatorios");
+        if (!name || !category || !serialNumber || !status || !branch || !purchaseDate || !price) {
+        toast.error("Todos los campos son obligatorios");
         return;
         }
 
@@ -88,16 +91,13 @@ function Inventory() {
         addEquipment(newEquipment); // Guarda
 
         setEquipments(getEquipments()); // Actualiza pantalla
+        
+        toast.success("Equipo creado correctamente");
     
         // Limpia formulario
-        setName("");
-        setCategory("");
-        setSerialNumber("");
-        setStatus("");
-        setBranch("");
-        setPurchaseDate("");
-        setPrice("");
+        handleOpenCreateModal();
 
+        setIsModalOpen(false);
     }
 
     // Al presionar editar: llena el formulario automáticamente. 
@@ -111,20 +111,14 @@ function Inventory() {
         setBranch(equipment.branch);
         setPurchaseDate(equipment.purchaseDate);
         setPrice(equipment.price.toString());
+
+        setIsModalOpen(true);
     };
 
     // EDITAR UN EQUIPO 
     const handleUpdateEquipment = () => {
-        if (
-            !name ||
-            !category ||
-            !serialNumber ||
-            !status ||
-            !branch ||
-            !purchaseDate ||
-            !price
-            ) {
-                alert("Todos los campos son obligatorios");
+        if (!name || !category || !serialNumber || !status || !branch || !purchaseDate || !price) {
+            toast.error("Todos los campos son obligatorios");
             return;
         }
 
@@ -145,9 +139,41 @@ function Inventory() {
 
         setEquipments(getEquipments()); // Refresca pantalla
 
-        setEditId(null); 
+        toast.success("Equipo actualizado correctamente");
 
-        // Limpia formulario
+        setEditId(null); 
+        
+        handleOpenCreateModal(); // Limpia formulario
+
+        setIsModalOpen(false);
+    }
+
+    // ELIMINAR UN EQUIPO
+        const handleDeleteEquipment = (equipment: Equipment) => {
+        setEquipmentToDelete(equipment);
+        setIsDeleteModalOpen(true);
+    };
+
+    // Confirmar eliminación del equipo seleccionado en el modal de confirmación
+    const confirmDeleteEquipment = () => {
+
+    if (!equipmentToDelete) return;
+
+    deleteEquipment(equipmentToDelete.id);
+
+    setEquipments(getEquipments());
+
+    toast.success("Equipo eliminado correctamente");
+
+    setIsDeleteModalOpen(false);
+
+    setEquipmentToDelete(null);
+};
+
+    // LIMPIAR FORMULARIO
+    const handleOpenCreateModal = () => {
+        setEditId(null);
+
         setName("");
         setCategory("");
         setSerialNumber("");
@@ -155,20 +181,16 @@ function Inventory() {
         setBranch("");
         setPurchaseDate("");
         setPrice("");
-    }
 
-    // BORRAR UN EQUIPO
-    const handleDeleteEquipment = (id : string) => {
-
-        const confirmDelete = window.confirm (
-            "Desea eliminar este equipo?"
-        );
-
-        if (!confirmDelete) return;
-
-        deleteEquipment(id); // Elimina el equipo del localStorage
-        setEquipments(getEquipments()); // Actualiza pantalla
+        setIsModalOpen(true);
     };
+
+    // ABRIR MODAL DE DETALLES
+    const handleViewDetails = (equipment: Equipment) => {
+        setSelectedEquipment(equipment); // Guarda el equipo seleccionado para mostrar sus detalles en el modal
+        setIsDetailModalOpen(true);
+    };
+
 
     // FILTRAR EQUIPOS
     const filteredEquipments = equipments.filter((equipment) => {
@@ -198,6 +220,33 @@ function Inventory() {
 
     return (
         <div className="container mt-4">
+            <Toaster
+                position="top-center"
+                toastOptions={{
+                    
+                    duration: 3000,
+                    style: {
+                        minWidth: '400px', // Aumenta el ancho mínimo del cuadro
+                        fontSize: '20px', 
+                        padding: '20px', // Agrega más espacio interno
+                        background: "#1f2937",
+                        color: "#fff",
+                        border: "1px solid #374151",
+                    },
+                    success: { // Icono de éxito
+                        iconTheme: {
+                            primary: "#22c55e",
+                            secondary: "#fff",
+                        },
+                    },
+                    error: {
+                        iconTheme: { // Icono de error 
+                            primary: "#ef4444",
+                            secondary: "#fff",
+                        },
+                    }
+                }}
+            />
             {/* TÍTULO */}
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-white">
@@ -207,202 +256,147 @@ function Inventory() {
                     Gestiona los equipos tecnológicos de las sucursales.
                 </p>
             </div>
-            {/* TOOLBAR - para buscador y filtros */}
+            {/* TOOLBAR */}
             <div className="bg-gray-800 border border-gray-700 rounded-xl p-5 mb-6">
-                {/* BUSCADOR */}
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        placeholder="Buscar equipo por nombre o número de serie..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="
-                        w-full
-                        px-4
-                        py-3
-                        rounded-lg
-                        bg-gray-900
-                        border
-                        border-gray-600
-                        text-white
-                        placeholder-gray-400
-                        focus:outline-none
-                        focus:ring-2
-                        focus:ring-cyan-400
-                        "
-                    />
-            </div>
-            {/* FILTROS + BOTÓN */}
-            <div className="flex flex-col lg:flex-row gap-3 justify-between">
-                 {/* FILTROS */}
-                <div className="flex flex-col md:flex-row gap-3 flex-1">
+                {/* FILA SUPERIOR */}
+                <div className="flex flex-col lg:flex-row gap-3 mb-4">
+                    {/* BUSCADOR */}
+                    <div className="relative flex-1">
+                        <Search
+                            size={18}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Buscar equipo por nombre o número de serie..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-4 py-3 rounded-lg bg-gray-900 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"/>
+                    </div>
+
+                    {/* BOTÓN */}
+                    <button
+                        onClick={handleOpenCreateModal}
+                        className="flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition whitespace-nowrap">
+                        <Plus size={18} />
+                        Nuevo Equipo
+                    </button>
+
+                </div>
+
+                {/* FILTROS */}
+                <div className="flex flex-col md:flex-row gap-3">
                     {/* CATEGORÍA */}
                     <select
-                    value={categoryFilter}
-                    onChange={(e) => setCategoryFilter(e.target.value)}
-                    className="
-                        px-3
-                        py-2
-                        rounded-lg
-                        bg-gray-900
-                        border
-                        border-gray-600
-                        text-white
-                    "
-                    >
-                    <option value="">Todas las categorías</option> // Si el filtro está vacío, muestra todas las categorías, de lo contrario, muestra solo los equipos que coincidan con la categoría seleccionada
+                        value={categoryFilter}
+                        onChange={(e) => setCategoryFilter(e.target.value)}
+                        className="flex-1 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white">
+                        <option value="">Todas las categorías</option>
 
-                    {categories.map((category) => (
-                        <option key={category} value={category}>
-                        {category}
-                        </option>
-                    ))}
+                        {categories.map((category) => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
                     </select>
+
                     {/* ESTADO */}
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="
-                            px-3
-                            py-2
-                            rounded-lg
-                            bg-gray-900
-                            border
-                            border-gray-600
-                            text-white
-                        "
-                        >
+                        className="flex-1 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white">
                         <option value="">Todos los estados</option>
 
                         {statuses.map((status) => (
                             <option key={status} value={status}>
-                            {status}
+                                {status}
                             </option>
                         ))}
                     </select>
+
                     {/* SUCURSAL */}
                     <select
                         value={branchFilter}
                         onChange={(e) => setBranchFilter(e.target.value)}
-                        className="
-                            px-3
-                            py-2
-                            rounded-lg
-                            bg-gray-900
-                            border
-                            border-gray-600
-                            text-white
-                        "
-                        >
+                        className="flex-1 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white">
                         <option value="">Todas las sucursales</option>
 
                         {branches.map((branch) => (
                             <option key={branch.id} value={branch.name}>
-                            {branch.name}
+                                {branch.name}
                             </option>
                         ))}
                     </select>
                 </div>
-                {/* BOTÓN AGREGAR */}
-                <button className="px-5 py-2 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition">
-                    + Agregar Equipo
-                </button>
             </div>
-            </div>
-            {/* FORMULARIO VIEJO OCULTO TEMPORALMENTE */}
-            <div className="hidden">
-                <input
-                    className="w-full mb-2 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
-                    style={{ color: "white" }}
-                    type="text"
-                    placeholder="Nombre"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-
-                <input
-                    className="w-full mb-2 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
-                    type="text"
-                    placeholder="Número de serie"
-                    value={serialNumber}
-                    onChange={(e) => setSerialNumber(e.target.value)}
-                />
-
-                <input
-                    className="w-full mb-2 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400"
-                    type="date"
-                    value={purchaseDate}
-                    onChange={(e) => setPurchaseDate(e.target.value)}
-                />
-
-                <input
-                    className="w-full mb-2 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white focus:outline-none
-                    focus:ring-2 focus:ring-cyan-400"
-                    type="number"
-                    placeholder="Precio"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                />
-
-                <select
-                    className="w-full mb-2 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                >
-                    <option value="">Seleccione categoría</option>
-
-                    {categories.map((category) => (
-                    <option key={category} value={category}>
-                        {category}
-                    </option>
-                    ))}
-                </select>
-
-                <select
-                    className="w-full mb-2 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
-                >
-                    <option value="">Seleccione estado</option>
-
-                    {statuses.map((status) => (
-                    <option key={status} value={status}>
-                        {status}
-                    </option>
-                    ))}
-                </select>
-
-                <select
-                    className="w-full mb-2 px-3 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                    value={branch}
-                    onChange={(e) => setBranch(e.target.value)}
-                >
-                    <option value="">Seleccione sucursal</option>
-
-                    {branches.map((branch) => (
-                    <option key={branch.id} value={branch.name}>
-                        {branch.name}
-                    </option>
-                    ))}
-                </select>
-
-                <button 
-                    className="w-full py-2 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400 transition" 
-                    onClick={
-                        editId
-                        ? handleUpdateEquipment
-                        : handleAddEquipment
-                    }
-                >
-                {editId ? "Actualizar equipo" : "Agregar equipo"}
-                </button>
-            </div>
+            
             {/* TABLA */}
             {/* Pasa los equipos filtrados y las funciones de editar y eliminar como props al componente InventoryTable */}
             <InventoryTable
                 equipments={filteredEquipments}
                 onEdit={handleEditEquipment}
                 onDelete={handleDeleteEquipment}
+                onViewDetails={handleViewDetails}
+            />
+            {/* MODAL PARA CREAR/EDITAR EQUIPOS */}
+            <EquipmentModal // Modal para crear o editar equipos
+                isOpen={isModalOpen}
+                title={editId ? "Editar Equipo" : "Nuevo Equipo"}
+                onClose={() => setIsModalOpen(false)}
+                >
+                <EquipmentForm
+                    name={name}
+                    setName={setName}
+
+                    category={category}
+                    setCategory={setCategory}
+
+                    serialNumber={serialNumber}
+                    setSerialNumber={setSerialNumber}
+
+                    status={status}
+                    setStatus={setStatus}
+
+                    branch={branch}
+                    setBranch={setBranch}
+
+                    purchaseDate={purchaseDate}
+                    setPurchaseDate={setPurchaseDate}
+
+                    price={price}
+                    setPrice={setPrice}
+
+                    categories={categories}
+                    statuses={statuses}
+                    branches={branches}
+
+                    editId={editId}
+
+                    onSubmit={
+                    editId
+                        ? handleUpdateEquipment
+                        : handleAddEquipment
+                    }
+                    onClose={() => setIsModalOpen(false)}
+                />
+            </EquipmentModal>
+
+            {/* MODAL DE ELIMINACIÓN */}
+            <DeleteModal
+                isOpen={isDeleteModalOpen}
+                equipmentName={equipmentToDelete?.name || ""}
+                onConfirm={confirmDeleteEquipment}
+                onClose={() => {
+                    setIsDeleteModalOpen(false);
+                    setEquipmentToDelete(null);
+                }}
+            />
+            
+            {/* MODAL DE DETALLES */}
+            <DetailModal
+                isOpen={isDetailModalOpen}
+                equipment={selectedEquipment}
+                onClose={() => setIsDetailModalOpen(false)}
             />
         </div>
     );
