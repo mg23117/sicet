@@ -1,5 +1,5 @@
 // Componente para mostrar los detalles de un equipo en un modal
-import type { Equipment } from "../types/Equipment";
+import type { Equipment } from "../../types/Equipment";
 
 type DetailModalProps = {
     isOpen: boolean;
