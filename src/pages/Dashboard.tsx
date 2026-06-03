@@ -18,7 +18,7 @@ const stats = {
   return (
    
    <div>
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-3xl font-bold mb-6 text-textMenu">
         Panel de Resumen del Sistema
         </h1>
 

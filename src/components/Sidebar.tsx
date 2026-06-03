@@ -10,7 +10,7 @@ const menuItems = [
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 min-h-screen bg-[#0B1120] border-r border-slate-800 text-slate-300 shadow-xl">
+    <aside className="w-64 min-h-screen bg-sidebar border-r border-slate-800 text-textMenu shadow-xl">
       <div className="flex flex-col items-center text-center px-4 py-6 border-b border-slate-700">
         <img
           src={logo}
@@ -18,7 +18,7 @@ const Sidebar = () => {
           className="w-16 h-16 rounded-full object-cover border-4 border-primary shadow-lg mb-4"
         />
 
-        <h1 className="text-sm font-bold text-textMain leading-tight">
+        <h1 className="text-sm font-bold leading-tight">
           Sistema de Control de Equipos Tecnológicos
         </h1>
       </div>
@@ -30,7 +30,7 @@ const Sidebar = () => {
             to={item.path}
             className={({ isActive }) =>
               `block px-4 py-3 rounded-lg transition ${isActive
-                ? "bg-optionMenu text-white border-l-4 border-textMenu"
+                ? "bg-optionMenu text-textMenu border-l-4 border-textMenu"
                 : "hover:bg-fondoPrincipal hover:text-textMenu"
               }`
             }

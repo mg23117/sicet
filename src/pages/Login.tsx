@@ -2,6 +2,7 @@ import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/Logo.png";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -33,8 +34,9 @@ const Login = () => {
 
         <button
           onClick={handleGoogleLogin}
-          className="w-full bg-textMenu text-black py-3 rounded-lg font-semibold hover:opacity-90 transition"
+          className="w-full bg-textMenu text-black py-3 rounded-lg font-semibold hover:opacity-90 transition flex items-center justify-center gap-2"
         >
+          <FcGoogle size={20} />
           Continuar con Google
         </button>
       </div>

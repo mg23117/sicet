@@ -20,7 +20,7 @@ const Header = ({ setSidebarOpen }: HeaderProps) => {
   };
 
   return (
-    <header className="h-16 bg-header border-b border-slate-700 flex items-center justify-between px-6 text-white">
+    <header className="h-16 bg-header border-b border-slate-700 flex items-center justify-between px-6 text-textMenu">
       <div className="flex items-center gap-4">
         <button
           onClick={() => setSidebarOpen((prev) => !prev)}

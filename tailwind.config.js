@@ -6,13 +6,13 @@ export default {
   ],
   theme: {
     extend: {
-        colors: {
-            fondoPrincipal: "#111214",
-            sidebar: "#1E2225",
-            header: "#1E2225",
-            optionMenu: "#111214",
-            textMenu: "#00E5FF"
-        }
+      colors: {
+        fondoPrincipal: "var(--fondo-principal)",
+        sidebar: "var(--sidebar)",
+        header: "var(--header)",
+        optionMenu: "var(--option-menu)",
+        textMenu: "var(--text-menu)"
+      }
     },
   },
   plugins: [],
