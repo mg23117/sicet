@@ -1,6 +1,6 @@
 // Componente de presentación que muestra la lista de equipos en una tabla
 // y permite ejecutar acciones de edición y eliminación 
-import type { Equipment } from "../types/Equipment";
+import type { Equipment } from "../../types/Equipment";
 import { Pencil, Trash2, Eye} from "lucide-react";
 
 type InventoryTableProps = { // describe qué datos espera recibir InventoryTable
