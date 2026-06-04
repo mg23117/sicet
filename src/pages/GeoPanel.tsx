@@ -86,59 +86,69 @@ export default function GeoPanel() {
     };
 
     return (
-        <div className="flex h-full w-full">
+        <div className="h-[calc(100vh-4rem)] w-full bg-appBg px-5 py-5 overflow-hidden">
+            <div className="flex h-full min-h-0 gap-5 flex-col lg:flex-row">
+                <div className="flex-1 min-w-0 flex flex-col gap-5">
 
-            {/*E div deL mapa*/}
-            <div className="flex-1 relative">
-                <MapContainer
-                    center={INITIAL_CENTER}
-                    zoom={DEFAULT_ZOOM}
-                    style={{ height: "100%", width: "100%" }}
-                >
-                    {/** Cambiar de vista cuando se seleccione un equipo */}
-                    {equipmentSelected && (
-                        <ChangeView center={[branchCoordMap.get(equipmentSelected.branch)!.lat, branchCoordMap.get(equipmentSelected.branch)!.lng]} zoom={MEDIUM_ZOOM} />
-                    )}
+                    <h1 className="text-2xl font-semibold tracking-wide text-white">
+                        GEOLOCALIZACIÓN DE EQUIPOS
+                    </h1>
 
-                    {/** El mapa como tal */}
-                    <TileLayer
-                        url={MAP_PROVIDERS.voyager.url}
-                        attribution={MAP_PROVIDERS.voyager.attribution}
+                    {/*E div deL mapa*/}
+                    <div className="flex-1 min-h-0 relative rounded-[28px] overflow-hidden shadow-2xl border border-white/5 bg-[#0F1114]">
+                        <MapContainer
+                            center={INITIAL_CENTER}
+                            zoom={DEFAULT_ZOOM}
+                            style={{ height: "100%", width: "100%" }}
+                        >
+                            {/** Cambiar de vista cuando se seleccione un equipo */}
+                            {equipmentSelected && (
+                                <ChangeView center={[branchCoordMap.get(equipmentSelected.branch)!.lat, branchCoordMap.get(equipmentSelected.branch)!.lng]} zoom={MEDIUM_ZOOM} />
+                            )}
+
+                            {/** El mapa como tal */}
+                            <TileLayer
+                                url={MAP_PROVIDERS.voyager.url}
+                                attribution={MAP_PROVIDERS.voyager.attribution}
+                            />
+
+                            <EquipmentPopup
+                                filteredEquipments={filteredEquipments}
+                                equipmentSelected={equipmentSelected}
+                                clickEventHandler={handleSelectedEquipment}
+                                onOpenModal={handleOpenModal}
+                                branchCoordMap={branchCoordMap}
+                            />
+
+                            {modalEquipment && (
+                                <EquipmentDetailModal equipment={modalEquipment} onClose={() => setModalEquipment(null)} />
+                            )}
+
+                            {!equipmentSelected && (
+                                <FitBounds equipments={filteredEquipments} branchCoordMap={branchCoordMap} />
+                            )}
+
+                        </MapContainer>
+                        {/** Es el botón que aparece SOLO CUANDO está un equipo seleccionado y permite ver todos los disponibles en el mapa */}
+                        <ResetViewButton onClick={handleResetView} visible={!!equipmentSelected} />
+                    </div>
+                </div>
+
+                {/**Sección de filtros */}
+                <div className="w-full lg:w-[360px] shrink-0 min-h-0">
+                    <MapFilters
+                        branchFilter={branchFilter}
+                        onBranchFilterChange={setBranchFilter}
+                        searchTerm={searchTerm}
+                        onSearchTermChange={setSearchTerm}
+                        equipments={filteredEquipments}
+                        branches={availableBranches}
+                        hoveredEquipmentId={hoveredEquipmentId}
+                        onHoverEquipment={setHoveredEquipmentId}
+                        onSelectEquipment={handleSelectedEquipment}
                     />
-
-                    <EquipmentPopup
-                        filteredEquipments={filteredEquipments}
-                        equipmentSelected={equipmentSelected}
-                        clickEventHandler={handleSelectedEquipment}
-                        onOpenModal={handleOpenModal}
-                        branchCoordMap={branchCoordMap}
-                    />
-
-                    {modalEquipment && (
-                        <EquipmentDetailModal equipment={modalEquipment} onClose={() => setModalEquipment(null)} />
-                    )}
-
-                    {!equipmentSelected && (
-                        <FitBounds equipments={filteredEquipments} branchCoordMap={branchCoordMap} />
-                    )}
-
-                </MapContainer>
-                {/** Es el botón que aparece SOLO CUANDO está un equipo seleccionado y permite ver todos los disponibles en el mapa */}
-                <ResetViewButton onClick={handleResetView} visible={!!equipmentSelected} />
+                </div>
             </div>
-
-            {/**Sección de filtros */}
-            <MapFilters
-                branchFilter={branchFilter}
-                onBranchFilterChange={setBranchFilter}
-                searchTerm={searchTerm}
-                onSearchTermChange={setSearchTerm}
-                equipments={filteredEquipments}
-                branches={availableBranches}
-                hoveredEquipmentId={hoveredEquipmentId}
-                onHoverEquipment={setHoveredEquipmentId}
-                onSelectEquipment={handleSelectedEquipment}
-            />
-        </div >
+        </div>
     );
 }

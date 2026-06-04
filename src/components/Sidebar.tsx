@@ -1,16 +1,17 @@
 import { NavLink } from "react-router-dom";
 import logo from "../assets/Logo.png";
+import { TbLayoutDashboard , TbBriefcase, TbMapPin, TbNut } from "react-icons/tb";
 
 const menuItems = [
-  { name: "Panel de control", path: "/" },
-  { name: "Inventario", path: "/inventario" },
-  { name: "Geolocalización", path: "/geolocalizacion" },
-  { name: "Configuración", path: "/configuracion" },
+  { icon: <TbLayoutDashboard  />, name: "Panel de control", path: "/" },
+  { icon: <TbBriefcase/>, name: "Inventario", path: "/inventario" },
+  { icon: <TbMapPin/>, name: "Geolocalización", path: "/geolocalizacion" },
+  { icon: <TbNut/>, name: "Configuración", path: "/configuracion" },
 ];
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 min-h-screen bg-sidebar border-r border-slate-800 text-textMenu shadow-xl">
+    <aside className="w-64 min-h-screen bg-fondoSecundario border-r border-slate-800 text-textoPrincipal shadow-xl">
       <div className="flex flex-col items-center text-center px-4 py-6 border-b border-slate-700">
         <img
           src={logo}
@@ -29,13 +30,14 @@ const Sidebar = () => {
             key={item.path}
             to={item.path}
             className={({ isActive }) =>
-              `block px-4 py-3 rounded-lg transition ${isActive
-                ? "bg-optionMenu text-textMenu border-l-4 border-textMenu"
-                : "hover:bg-fondoPrincipal hover:text-textMenu"
+              `flex items-center gap-3 px-4 py-3 rounded-lg transition ${isActive
+                ? "bg-fondoPrincipal text-text-textoSecundario border-l-4 border-textoSecundario"
+                : "hover:bg-fondoPrincipal hover:text-textoSecundario"
               }`
             }
           >
-            {item.name}
+            {item.icon}
+            <span>{item.name}</span>
           </NavLink>
         ))}
       </nav>

@@ -4,19 +4,21 @@
 
 :root {
     --fondo-principal: #111214;
-    --sidebar: #1E2225;
-    --header: #1E2225;
-    --option-menu: #111214;
-    --text-menu: #00E5FF;
+    --fondo-secundario: #1E2225; 
+    --fondo-terciario: #111827;
+    --texto-principal: #FFFFFF;
+    --texto-secundario: #00E5FF;
+    --text-terciario: #9CA3AF;
 }
 
 /* Tema oscuro */
 [data-theme="dark"] {
     --fondo-principal: #111214;
-    --sidebar: #1E2225;
-    --header: #1E2225;
-    --option-menu: #111214;
-    --text-menu: #00E5FF;
+    --fondo-secundario: #1E2225; 
+    --fondo-terciario: #111827;
+    --texto-principal: #FFFFFF;
+    --texto-secundario: #00E5FF;
+    --text-terciario: #9CA3AF;
 }
 
 /* Tema claro */
