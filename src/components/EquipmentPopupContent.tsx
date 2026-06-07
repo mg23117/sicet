@@ -1,6 +1,7 @@
 import type { Equipment } from '../types/Equipment';
 import { Building2, Barcode } from 'lucide-react';
 import { getStatusStyle } from '../constants/statusStyles';
+import { useTranslation } from 'react-i18next';
 
 interface EquipmentPopupContentProps {
     equipment: Equipment;
@@ -8,6 +9,7 @@ interface EquipmentPopupContentProps {
 }
 
 export default function EquipmentPopupContent({ equipment, onOpenModal }: EquipmentPopupContentProps) {
+    const { t } = useTranslation("geopanel");
     return (
         <>
             <div className="min-w-[240px] max-w-sm p-2">
@@ -48,7 +50,7 @@ export default function EquipmentPopupContent({ equipment, onOpenModal }: Equipm
                             onClick={() => onOpenModal(equipment)}
                             className="mt-3 w-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-medium py-1.5 px-3 rounded-md transition-colors"
                         >
-                            Ver detalles
+                            {t("seeDetails")}
                         </button>
                     </div>
                 </div>

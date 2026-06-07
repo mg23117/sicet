@@ -2,6 +2,7 @@ import { Menu, LogOut } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 interface HeaderProps {
   sidebarOpen: boolean;
@@ -10,6 +11,7 @@ interface HeaderProps {
 
 const Header = ({ setSidebarOpen }: HeaderProps) => {
   const { user } = useAuth();
+  const { t } = useTranslation("header");
 
   const handleLogout = async () => {
     try {
@@ -20,13 +22,13 @@ const Header = ({ setSidebarOpen }: HeaderProps) => {
   };
 
   return (
-    <header className="h-16 bg-fondoSecundario border-b border-slate-700 flex items-center justify-between px-6 text-textoPrincipal">
+    <header className="h-16 bg-hdrBgMain border-b border-slate-700 flex items-center justify-between px-6 text-hdrTxtMain">
       <div className="flex items-center gap-4">
         <button
           onClick={() => setSidebarOpen((prev) => !prev)}
           aria-label="Mostrar u ocultar menú lateral"
-          title="Menú"
-          className="p-2 rounded-lg hover:bg-slate-800 transition"
+          title={t("labelMenu")}
+          className="p-2 rounded-lg hover:bg-hdrBgThird transition"
         >
           <Menu size={24} />
         </button>
@@ -51,14 +53,14 @@ const Header = ({ setSidebarOpen }: HeaderProps) => {
             <img
               src={user.photoURL || ""}
               alt="Perfil del usuario"
-              className="w-10 h-10 rounded-full border border-primary"
+              className="w-10 h-10 rounded-full border border-hdrBgSeg"
             />
 
             <button
               onClick={handleLogout}
-              aria-label="Cerrar sesión"
-              title="Cerrar sesión"
-              className="p-2 rounded-lg hover:bg-slate-800 transition"
+              aria-label={t("labelLogOut")}
+              title={t("labelLogOut")}
+              className="p-2 rounded-lg hover:bg-hdrBgThird transition"
             >
               <LogOut size={20} />
             </button>

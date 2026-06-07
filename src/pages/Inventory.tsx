@@ -14,6 +14,7 @@ import useEquipmentForm from "../hooks/inventoryHooks/useEquipmentForm";
 import InventoryToolbar from "../components/inventoryComponents/InventoryToolbar";
 import useEquipmentFilters from "../hooks/inventoryHooks/useEquipmentFilters";
 import useInventoryData from "../hooks/inventoryHooks/useInventoryData";
+import { useTranslation } from "react-i18next";
 
 
 import { // Importa funciones para manejar el almacenamiento de equipos en localStorage
@@ -25,6 +26,8 @@ import { // Importa funciones para manejar el almacenamiento de equipos en local
 } from "../services/EquipmentStorage";
 
 function Inventory() { 
+    //Para traducción.
+    const { t } = useTranslation("inventory");
 
     // HOOKS personalizados
     const {categories, statuses, branches,} = useInventoryData(); // Carga las categorías, estados y sucursales desde archivos JSON utilizando el hook personalizado useInventoryData
@@ -171,11 +174,11 @@ function Inventory() {
         <div className="container mt-4">
             {/* TÍTULO */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white">
-                    Inventario de Equipos
+                <h1 className="text-3xl font-bold text-bodyTxtMain">
+                    {t("title")}
                 </h1>
-                <p className="text-gray-400 mt-1">
-                    Gestiona los equipos tecnológicos de las sucursales.
+                <p className="text-bodyTxtThird mt-1">
+                    {t("description")}
                 </p>
             </div>
             {/* TOOLBAR */}
@@ -210,7 +213,7 @@ function Inventory() {
             {/* MODAL PARA CREAR/EDITAR EQUIPOS */}
             <EquipmentModal // Modal para crear o editar equipos
                 isOpen={isModalOpen}
-                title={editId ? "Editar Equipo" : "Nuevo Equipo"}
+                title={editId ? t("titleEqUpdate") : t("titleEqNew")}
                 onClose={() => setIsModalOpen(false)}
                 >
                 <EquipmentForm

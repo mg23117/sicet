@@ -1,0 +1,23 @@
+{
+    "title": "EQUIPMENT GEOLOCATION",
+    
+    "titlePanel": "SEARCH PANEL",
+    "lookEq": "Search equipment",
+    "filter": "Filter by branch",
+    "branch": "Branch",
+    "msgBranch": "Select an option",
+    "resultLook": "SEARCH RESULTS",
+    "msgResult": "No equipment found",
+
+    "detailsEq": "Equipment details",
+    "name": "Name",
+    "serialNum": "Serial number",
+    "status": "Condition",
+    "date": "Purchase date",
+    "price": "Price",
+    "btnClose": "Close",
+
+    "seeDetails": "View details",
+
+    "seeAll": "View all"
+}

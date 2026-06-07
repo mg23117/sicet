@@ -3,31 +3,102 @@
 @tailwind utilities;
 
 :root {
-    --fondo-principal: #111214;
-    --fondo-secundario: #1E2225; 
-    --fondo-terciario: #111827;
-    --texto-principal: #FFFFFF;
-    --texto-secundario: #00E5FF;
-    --text-terciario: #9CA3AF;
+    
+    /*Colores del Sidebar*/
+    /*Background*/
+    --sbr-bgmain: #1E2225;
+    --sbr-bgseg: #111214;
+    --sbr-bgthird: #9CA3AF;
+    /*Texto*/ 
+    --sbr-txtmain: #FFFFFF;
+    --sbr-txtseg: #00E5FF;
+    --sbr-txtThird: #9CA3AF;
+
+    /*Colores del Header*/
+    /*Background*/
+    --hdr-bgmain: #1E2225;
+    --hdr-bgseg: #111214;
+    --hdr-bgthird: #111827;
+    /*Texto*/
+    --hdr-txtmain: #FFFFFF;
+    --hdr-txtseg: #00E5FF;
+    --hdr-txtThird: #9CA3AF;
+
+    /*Colores del Body*/
+    /*Backgroud*/
+    --body-bgmain: #111214;
+    --body-bgseg: #1E2225;
+    --body-bgthird: #111827;
+    /*Texto*/
+    --body-txtmain: #FFFFFF;
+    --body-txtseg: #00E5FF;
+    --body-txtThird: #9CA3AF;
 }
 
 /* Tema oscuro */
 [data-theme="dark"] {
-    --fondo-principal: #111214;
-    --fondo-secundario: #1E2225; 
-    --fondo-terciario: #111827;
-    --texto-principal: #FFFFFF;
-    --texto-secundario: #00E5FF;
-    --text-terciario: #9CA3AF;
+    /*Colores del Sidebar*/
+    /*Background*/
+    --sbr-bgmain: #1E2225;
+    --sbr-bgseg: #111214;
+    --sbr-bgthird: #9CA3AF;
+    /*Texto*/ 
+    --sbr-txtmain: #FFFFFF;
+    --sbr-txtseg: #00E5FF;
+    --sbr-txtThird: #9CA3AF;
+
+    /*Colores del Header*/
+    /*Background*/
+    --hdr-bgmain: #1E2225;
+    --hdr-bgseg: #111214;
+    --hdr-bgthird: #111827;
+    /*Texto*/
+    --hdr-txtmain: #FFFFFF;
+    --hdr-txtseg: #00E5FF;
+    --hdr-txtThird: #9CA3AF;
+
+    /*Colores del Body*/
+    /*Backgroud*/
+    --body-bgmain: #111214;
+    --body-bgseg: #1E2225;
+    --body-bgthird: #111827;
+    /*Texto*/
+    --body-txtmain: #FFFFFF;
+    --body-txtseg: #00E5FF;
+    --body-txtThird: #9CA3AF;
 }
 
 /* Tema claro */
 [data-theme="light"] {
-    --fondo-principal: #FFFFFF;
-    --sidebar: #F3F4F4;
-    --header: #F3F4F4;
-    --option-menu: #FFFFFF;
-    --text-menu: #000000;
+    /*Colores del Sidebar*/
+    /*Background*/
+    --sbr-bgmain: #303481;
+    --sbr-bgseg: #F5F5F5;
+    --sbr-bgthird: #D6E6F2;
+    /*Texto*/ 
+    --sbr-txtmain: #F5F5F5;
+    --sbr-txtseg: #E91E63;
+    --sbr-txtThird: #FF6B4A;
+
+    /*Colores del Header*/
+    /*Background*/
+    --hdr-bgmain: #141636;
+    --hdr-bgseg: #303481;
+    --hdr-bgthird: #23265E;
+    /*Texto*/
+    --hdr-txtmain: #F5F5F5;
+    --hdr-txtseg: #DCC3AA;
+    --hdr-txtThird: #9CA3AF;
+
+    /*Colores del Body*/
+    /*Backgroud*/
+    --body-bgmain: #F0F3FF;
+    --body-bgseg: #FFFFFF;
+    --body-bgthird: #D2E5FA;
+    /*Texto*/
+    --body-txtmain: #141636;
+    --body-txtseg: #23265E;
+    --body-txtThird: #303481;
 }
 
 /*Colores. */

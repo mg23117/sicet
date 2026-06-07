@@ -1,0 +1,42 @@
+{
+    "title": "Inventario de Equipos",
+    "description": "Gestiona los equipos tecnológicos de las sucursales",
+
+    "phLook": "Buscar equipo por nombre o número de serie...",
+    "btnNewEq": "Nuevo Equipo",
+    "categoryLbl": "Categoría",
+    "categoryDes": "Todas las categorías",
+    "statusLbl": "Estado",
+    "statusDes": "Todos los estados",
+    "branchLbl": "Sucursal",
+    "branchDes": "Todas las sucursales",
+
+    "titleEqNew": "Nuevo Equipo",
+    "titleEqUpdate": "Editar Equipo",
+    "nameEq": "Nombre del equipo",
+    "serialNum": "Número de serie",
+    "curBranch": "Sucursal actual",
+    "price": "Precio de adquisición",
+    "date": "Fecha de adquisición",
+    "btnCancel": "Cancelar",
+    "btnSave": "Guardar equipo",
+    "btnUpdate": "Actualizar Equipo",
+    "select": "Seleccionar",
+
+    "id": "ID",
+    "name": "NOMBRE",
+    "category": "CATEGORÍA",
+    "status": "ESTADO",
+    "branch": "SUCURSAL",
+    "serial": "SERIE",
+    "action": "ACCIONES",
+    "registerEq": "No hay equipos registrados.",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "details": "Detalles",
+
+    "detailsEq": "Detalles del equipo",
+
+    "deleteEq": "Eliminar equipo",
+    "deleteQst": "¿Esta seguro de eliminar este equipo?"
+}

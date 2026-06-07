@@ -1,5 +1,6 @@
 // Componente para mostrar los detalles de un equipo en un modal
 import type { Equipment } from "../../types/Equipment";
+import { useTranslation } from "react-i18next";
 
 type DetailModalProps = {
     isOpen: boolean;
@@ -14,17 +15,17 @@ function DetailModal({
 }: DetailModalProps) {
 
     if (!isOpen || !equipment) return null;
-
+    const { t } = useTranslation("invetory");
     return (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
 
-            <div className="bg-gray-800 rounded-xl w-full max-w-2xl border border-gray-700 overflow-hidden">
+            <div className="bg-bodyBgSeg rounded-xl w-full max-w-2xl border border-gray-700 overflow-hidden">
 
                 {/* Header */}
                 <div className="flex justify-between items-center px-6 py-4 border-b border-gray-700">
 
-                    <h2 className="text-2xl font-bold text-white">
-                        Detalles del equipo
+                    <h2 className="text-2xl font-bold text-bodyTxtMain">
+                        {t("detailsEq")}
                     </h2>
 
                     <button
@@ -40,42 +41,42 @@ function DetailModal({
                 <div className="p-6 grid grid-cols-2 gap-5">
 
                     <DetailItem
-                        label="ID"
+                        label={t("id")}
                         value={equipment.id}
                     />
 
                     <DetailItem
-                        label="Categoría"
+                        label={t("categoryLbl")}
                         value={equipment.category}
                     />
 
                     <DetailItem
-                        label="Nombre"
+                        label={t("nameEq")}
                         value={equipment.name}
                     />
 
                     <DetailItem
-                        label="Número de serie"
+                        label={t("serialNum")}
                         value={equipment.serialNumber}
                     />
 
                     <DetailItem
-                        label="Estado"
+                        label={t("statusLbl")}
                         value={equipment.status}
                     />
 
                     <DetailItem
-                        label="Sucursal"
+                        label={t("branchLbl")}
                         value={equipment.branch}
                     />
 
                     <DetailItem
-                        label="Fecha de adquisición"
+                        label={t("date")}
                         value={equipment.purchaseDate}
                     />
 
                     <DetailItem
-                        label="Precio"
+                        label={t("price")}
                         value={`$${equipment.price}`}
                     />
 
@@ -99,11 +100,11 @@ function DetailItem({
 
     return (
         <div>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-bodyTxtThird">
                 {label}
             </p>
 
-            <p className="text-white font-medium">
+            <p className="text-bodyTxtMain font-medium">
                 {value}
             </p>
         </div>

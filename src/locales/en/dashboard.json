@@ -1,0 +1,13 @@
+{
+  "title": "System Summary Dashboard",
+
+  "totalEquipment": "Total Equipment",
+  "inRepair": "Under Repair",
+  "operational": "Operational",
+  "damaged": "Damaged",
+  "outOfService": "Out of Service",
+
+  "equipmentStatus": "Equipment Status",
+
+  "total": "Total"
+}

@@ -1,4 +1,5 @@
 // Componente para el modal de confirmación de eliminación de equipos
+import { useTranslation } from "react-i18next";
 
 type DeleteModalProps = {
     isOpen: boolean;
@@ -15,17 +16,17 @@ function DeleteModal({
 }: DeleteModalProps) {
 
     if (!isOpen) return null;
-
+    const { t } = useTranslation("inventory");
     return (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
 
-            <div className="bg-gray-800 rounded-xl w-full max-w-md border border-gray-700 overflow-hidden">
+            <div className="bg-bodyBgSeg rounded-xl w-full max-w-md border border-gray-700 overflow-hidden">
 
                 {/* Header */}
                 <div className="flex justify-between items-center px-6 py-4 border-b border-gray-700">
 
-                    <h2 className="text-xl font-bold text-white">
-                        Eliminar equipo
+                    <h2 className="text-xl font-bold text-bodyTxtMain">
+                        {t("deleteEq")}
                     </h2>
 
                     <button
@@ -40,11 +41,11 @@ function DeleteModal({
                 {/* Body */}
                 <div className="p-6">
 
-                    <p className="text-gray-300 mb-2">
-                        ¿Está seguro que desea eliminar este equipo?
+                    <p className="text-bodyTxtThird mb-2">
+                        {t("deleteQst")}
                     </p>
 
-                    <p className="text-cyan-400 font-semibold">
+                    <p className="text-bodyTxtSeg font-semibold">
                         {equipmentName}
                     </p>
 
@@ -55,16 +56,16 @@ function DeleteModal({
 
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:bg-gray-700 transition"
+                        className="px-4 py-2 rounded-lg border border-gray-600 text-bodyTxtThird hover:bg-bodyBgThird transition"
                     >
-                        Cancelar
+                       {t("btnCancel")}
                     </button>
 
                     <button
                         onClick={onConfirm}
                         className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-500 transition"
                     >
-                        Eliminar
+                        {t("delete")}
                     </button>
 
                 </div>

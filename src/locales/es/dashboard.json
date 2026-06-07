@@ -1,0 +1,13 @@
+{
+  "title": "Panel de Resumen del Sistema",
+
+  "totalEquipment": "Equipos Totales",
+  "inRepair": "En Reparación",
+  "operational": "Operativos",
+  "damaged": "Dañados",
+  "outOfService": "Fuera de Servicio",
+
+  "equipmentStatus": "Estado de los Equipos",
+
+  "total": "Total"
+}

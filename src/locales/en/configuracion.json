@@ -1,0 +1,16 @@
+{
+  "title": "SICET Settings",
+  "description": "Customize the app's appearance and language to suit your preferences.",
+  "appearance": "Appearance",
+
+  "theme": "Theme",
+  "light": "Light",
+  "dark": "Dark",
+
+  "language": "Language",
+  "language label": "Preferred language",
+  "spanish": "Spanish",
+  "english": "English",
+
+  "save": "Save Preferences"
+}
