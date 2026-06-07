@@ -1,0 +1,23 @@
+{
+    "title": "GEOLOCALIZACIÓN DE EQUIPOS",
+    
+    "titlePanel": "PANEL DE BÚSQUEDA",
+    "lookEq": "Buscar equipo",
+    "filter": "Filtro por sucursal",
+    "branch": "Sucursal",
+    "msgBranch": "Seleccione una opción",
+    "resultLook": "RESULTADOS DE BUSQUEDA",
+    "msgResult": "No se encontraron equipos",
+
+    "detailsEq": "Detalles del equipo",
+    "name": "Nombre",
+    "serialNum": "Número de serie",
+    "status": "Estado",
+    "date": "Purchase date",
+    "price": "Precio",
+    "btnClose": "Cerrar",
+
+    "seeDetails": "Ver detalles",
+
+    "seeAll": "Ver todos"
+}

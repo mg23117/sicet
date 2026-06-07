@@ -7,7 +7,7 @@ const GlobalLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="flex min-h-screen bg-fondoPrincipal">
+    <div className="flex min-h-screen bg-bodyBgMain">
       {sidebarOpen && <Sidebar />}
 
       <div className="flex-1 flex flex-col">
@@ -16,7 +16,7 @@ const GlobalLayout = () => {
           setSidebarOpen={setSidebarOpen}
         />
 
-        <main className="flex-1 p-6 bg-fondoPrincipal text-white overflow-y-auto">
+        <main className="flex-1 p-6 bg-bodyBgMain text-white overflow-y-auto">
           <Outlet />
         </main>
       </div>

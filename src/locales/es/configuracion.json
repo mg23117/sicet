@@ -1,0 +1,16 @@
+{
+  "title": "Configuración de SICET",
+  "description": "Personaliza la apariencia y el idioma de la aplicación según tus preferencias.",
+  "appearance": "Apariencia",
+
+  "theme": "Tema",
+  "light": "Claro",
+  "dark": "Oscuro",
+
+  "language": "Idioma",
+  "language label": "Idioma preferido",
+  "spanish": "Español",
+  "english": "Inglés",
+
+  "save": "Guardar preferencias"
+}

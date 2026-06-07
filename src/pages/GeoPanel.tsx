@@ -11,6 +11,7 @@ import MapFilters from "../components/MapFilters";
 import ResetViewButton from "../components/ResetViewButton";
 import { useFilteredEquipments } from "../hooks/useFilteredEquipments";
 import { useEquipmentsWithCoords } from "../hooks/useEquipmentsWithCoords";
+import { useTranslation } from "react-i18next";
 
 interface ChangeViewProps {
     center: [number, number];
@@ -32,8 +33,9 @@ function ChangeView({ center, zoom }: ChangeViewProps) {
 }
 
 export default function GeoPanel() {
+    const { t } = useTranslation("geopanel");
     const [searchTerm, setSearchTerm] = useState("");
-    const [branchFilter, setBranchFilter] = useState<string | null>("Todas");
+    const [branchFilter, setBranchFilter] = useState<string>("Todas");
     const [equipmentSelected, setEquipmentSelected] = useState<Equipment | null>(null);
     const [hoveredEquipmentId, setHoveredEquipmentId] = useState<string | null>(null);
     const [modalEquipment, setModalEquipment] = useState<Equipment | null>(null);
@@ -84,18 +86,18 @@ export default function GeoPanel() {
         setEquipmentSelected(null);
         setBranchFilter("Todas");
     };
-
+    
     return (
-        <div className="h-[calc(100vh-4rem)] w-full bg-appBg px-5 py-5 overflow-hidden">
+        <div className="h-[calc(100vh-4rem)] w-full bg-bodyBgMain px-5 py-5 overflow-hidden">
             <div className="flex h-full min-h-0 gap-5 flex-col lg:flex-row">
                 <div className="flex-1 min-w-0 flex flex-col gap-5">
 
-                    <h1 className="text-2xl font-semibold tracking-wide text-white">
-                        GEOLOCALIZACIÓN DE EQUIPOS
+                    <h1 className="text-2xl font-semibold tracking-wide text-bodyTxtMain">
+                        {t("title")}
                     </h1>
 
                     {/*E div deL mapa*/}
-                    <div className="flex-1 min-h-0 relative rounded-[28px] overflow-hidden shadow-2xl border border-white/5 bg-[#0F1114]">
+                    <div className="flex-1 min-h-0 relative rounded-[28px] overflow-hidden shadow-2xl border border-white/5 bg-bodyBgMain">
                         <MapContainer
                             center={INITIAL_CENTER}
                             zoom={DEFAULT_ZOOM}

@@ -18,10 +18,10 @@ if (!isOpen) return null; // Si el modal no está abierto, no renderiza nada (de
 
 return (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-            <div className="bg-gray-800 rounded-xl w-full max-w-2xl p-6 border border-gray-700">
+            <div className="bg-bodyBgSeg rounded-xl w-full max-w-2xl p-6 border border-gray-700">
 
             <div className="flex justify-between items-center mb-6 border-b border-gray-700 pb-3">
-                <h2 className="text-2xl font-bold text-white">
+                <h2 className="text-2xl font-bold text-bodyTxtMain">
                 {title}
                 </h2>
 

@@ -1,0 +1,42 @@
+{
+    "title": "Equipment Inventory",
+    "description": "Manages the technological equipment of the branches.",
+
+    "phLook": "Search for equipment by name or serial number...",
+    "btnNewEq":"New Equipment",
+    "categoryLbl":"Category",
+    "categoryDes": "All categories",
+    "statusLbl":"Condition",
+    "statusDes":"All conditions",
+    "branchLbl":"Branche Office",
+    "branchDes":"All branches",
+
+    "titleEqNew": "New Equipment",
+    "titleEqUpdate": "Update Equipment",
+    "nameEq": "Equipment name",
+    "serialNum": "Serial number",
+    "curBranch": "Current branch",
+    "price": "Purchase price",
+    "date": "Purchase date",
+    "btnCancel": "Cancel",
+    "btnSave": "Save equipment",
+    "btnUpdate": "Update equipment",
+    "select": "Select",
+
+    "id": "ID",
+    "name": "NAME",
+    "category": "CATEGORY",
+    "status": "CONDITION",
+    "branch": "BRANCH",
+    "serial": "SERIAL",
+    "action": "ACTIONS",
+    "registerEq": "There are no registered equipment.",
+    "edit": "Edit",
+    "delete": "Delete",
+    "details": "Details",
+
+    "detailsEq": "Equipment details",
+
+    "deleteEq": "Delete equipment",
+    "deleteQst": "Are you sure you want to delete this?"
+}
