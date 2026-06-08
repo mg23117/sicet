@@ -17,7 +17,10 @@ export function useEquipmentsWithCoords() {
     // y también filtramos los que no tienen coordenadas validas
     const equipmentsWithCoords = useMemo(() => {
         const missing = equipments.filter(eq => !branchCoordMap.has(eq.branch));
-        if (missing.length) console.warn('Equipos sin coordenadas:', missing);
+
+        if (branchCoordMap.size > 0 && missing.length) {
+            console.warn("Equipos sin coordenadas:", missing);
+        }
 
         return equipments.filter(eq => branchCoordMap.has(eq.branch));
     }, [equipments, branchCoordMap]);
