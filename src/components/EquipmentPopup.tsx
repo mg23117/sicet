@@ -3,6 +3,7 @@ import type { Equipment } from '../types/Equipment';
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import EquipmentPopupContent from "./EquipmentPopupContent";
+import { createStatusMarker } from "../constants/statusStyles";
 
 interface EquipmentPopupProps {
     filteredEquipments: Equipment[];
@@ -40,6 +41,10 @@ export default function EquipmentPopup({ filteredEquipments, clickEventHandler, 
                             if (ref) markerRef.current[e.id] = ref;
                         }}
                         eventHandlers={{ click: () => clickEventHandler(e) }}
+                        icon={createStatusMarker(
+                            e.status,
+                            equipmentSelected?.id === e.id
+                        )}
                     >
                         <Popup
                             minWidth={220}
